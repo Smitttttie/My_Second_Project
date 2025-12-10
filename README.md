@@ -1,12 +1,13 @@
 # Expense Tracker (local, no backend)
 
-Simple client-only web app to record expenses, filter them, and export to CSV. Data is stored in your browser’s localStorage.
+Client-only web app to record expenses, filter them, visualize trends, and export to CSV. Data is stored in your browser’s localStorage.
 
 ## Features
 - Add expenses with date, category, description, and amount.
 - Filter by date range, category, and text search.
-- Totals for all vs. filtered expenses.
+- Totals for all vs. filtered expenses, plus current-month highlight.
 - Delete individual entries, clear all, export filtered list to CSV.
+- Charts (Chart.js CDN): doughnut by category and line by month.
 - Works offline—no backend required.
 
 ## Getting Started

@@ -18,13 +18,36 @@
     countFiltered: document.getElementById("count-filtered"),
     exportCsv: document.getElementById("export-csv"),
     clearAll: document.getElementById("clear-all"),
+    heroMonthTotal: document.getElementById("hero-month-total"),
+    heroMonthLabel: document.getElementById("hero-month-label"),
+    scrollToForm: document.getElementById("scroll-to-form"),
+    scrollToCharts: document.getElementById("scroll-to-charts"),
+    categoryTotal: document.getElementById("category-total"),
+    timelineTotal: document.getElementById("timeline-total"),
   };
 
   let expenses = loadExpenses();
+  const charts = {
+    category: null,
+    timeline: null,
+  };
 
   // Initialize defaults and render
   setDefaultDate();
   render();
+
+  if (elements.scrollToForm) {
+    elements.scrollToForm.addEventListener("click", () => {
+      elements.form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  if (elements.scrollToCharts) {
+    elements.scrollToCharts.addEventListener("click", () => {
+      const chartsSection = document.getElementById("charts");
+      if (chartsSection) chartsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
 
   elements.form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -91,6 +114,7 @@
     const filtered = getFiltered();
     renderTable(filtered);
     updateTotals(filtered);
+    updateCharts(filtered);
   }
 
   function getFiltered() {
@@ -156,6 +180,15 @@
     elements.totalAll.textContent = formatCurrency(totalAll);
     elements.totalFiltered.textContent = formatCurrency(totalFiltered);
     elements.countFiltered.textContent = String(filtered.length);
+
+    // Hero bubble: current month total
+    const now = new Date();
+    const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const monthlyTotal = sum(
+      expenses.filter((item) => item.date.startsWith(thisMonthKey))
+    );
+    elements.heroMonthTotal.textContent = formatCurrency(monthlyTotal);
+    elements.heroMonthLabel.textContent = `Month ${now.toLocaleString(undefined, { month: "long" })}`;
   }
 
   function sum(list) {
@@ -202,6 +235,110 @@
       line.map((cell) => `"${cell}"`).join(",")
     );
     return csvLines.join("\r\n");
+  }
+
+  function updateCharts(filtered) {
+    if (typeof Chart === "undefined") return;
+
+    const categoryTotals = {};
+    filtered.forEach((item) => {
+      categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
+    });
+
+    const timelineTotals = {};
+    filtered.forEach((item) => {
+      const monthKey = item.date.slice(0, 7); // YYYY-MM
+      timelineTotals[monthKey] = (timelineTotals[monthKey] || 0) + item.amount;
+    });
+
+    const categoryLabels = Object.keys(categoryTotals);
+    const categoryValues = Object.values(categoryTotals);
+    elements.categoryTotal.textContent = formatCurrency(sum(filtered));
+
+    const timelineLabels = Object.keys(timelineTotals).sort();
+    const timelineValues = timelineLabels.map((k) => timelineTotals[k]);
+    elements.timelineTotal.textContent = formatCurrency(sum(filtered));
+
+    // Category chart
+    const palette = [
+      "#8b5cf6",
+      "#22d3ee",
+      "#34d399",
+      "#fbbf24",
+      "#f97316",
+      "#38bdf8",
+      "#f472b6",
+      "#c084fc",
+      "#a3e635",
+      "#facc15",
+    ];
+
+    if (charts.category) charts.category.destroy();
+    const catCtx = document.getElementById("category-chart");
+    if (catCtx) {
+      charts.category = new Chart(catCtx, {
+        type: "doughnut",
+        data: {
+          labels: categoryLabels,
+          datasets: [
+            {
+              data: categoryValues,
+              backgroundColor: categoryLabels.map((_, i) => palette[i % palette.length]),
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            legend: { position: "bottom", labels: { color: "#e5e7eb" } },
+          },
+        },
+      });
+    }
+
+    // Timeline chart
+    if (charts.timeline) charts.timeline.destroy();
+    const timeCtx = document.getElementById("timeline-chart");
+    if (timeCtx) {
+      charts.timeline = new Chart(timeCtx, {
+        type: "line",
+        data: {
+          labels: timelineLabels,
+          datasets: [
+            {
+              label: "Amount",
+              data: timelineValues,
+              borderColor: "#7c3aed",
+              backgroundColor: "rgba(124,58,237,0.22)",
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2,
+              pointRadius: 3,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              ticks: { color: "#9aa4b5" },
+              grid: { color: "rgba(255,255,255,0.05)" },
+            },
+            y: {
+              ticks: { color: "#9aa4b5" },
+              grid: { color: "rgba(255,255,255,0.05)" },
+            },
+          },
+          plugins: {
+            legend: { labels: { color: "#e5e7eb" } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => formatCurrency(ctx.parsed.y || 0),
+              },
+            },
+          },
+        },
+      });
+    }
   }
 
   function downloadFile(filename, content, type) {

@@ -5,12 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expense Tracker</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="topbar">
-    <h1>Expense Tracker</h1>
-    <p>Record, review, and export your spending.</p>
-  </header>
+  <div class="hero">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Personal Finance</p>
+        <h1>Expense Tracker</h1>
+        <p>Record, review, visualize, and export your spending.</p>
+        <div class="hero-actions">
+          <button type="button" id="scroll-to-form">Add Expense</button>
+          <button type="button" class="ghost" id="scroll-to-charts">View Charts</button>
+        </div>
+      </div>
+      <div class="stat-bubble">
+        <p>Monthly burn</p>
+        <strong id="hero-month-total">$0.00</strong>
+        <small id="hero-month-label">Current month</small>
+      </div>
+    </header>
+  </div>
 
   <main class="layout">
     <section class="panel">
@@ -107,6 +124,29 @@
       </div>
     </section>
 
+    <section class="panel" id="charts">
+      <div class="panel-header">
+        <h2>Insights</h2>
+        <div class="chip pulse">Live from your data</div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <p>Spend by Category</p>
+            <strong id="category-total">$0.00</strong>
+          </div>
+          <canvas id="category-chart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <p>Spend Over Time</p>
+            <strong id="timeline-total">$0.00</strong>
+          </div>
+          <canvas id="timeline-chart" height="200"></canvas>
+        </div>
+      </div>
+    </section>
+
     <section class="panel">
       <div class="panel-header">
         <h2>Expenses</h2>
@@ -136,6 +176,7 @@
     <small>Data is stored locally in your browser.</small>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
