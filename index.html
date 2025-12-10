@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Expense Tracker</h1>
+    <p>Record, review, and export your spending.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Add Expense</h2>
+      <form id="expense-form">
+        <div class="grid">
+          <label>
+            Date
+            <input type="date" id="date" name="date" required>
+          </label>
+          <label>
+            Category
+            <select id="category" name="category" required>
+              <option value="" disabled selected>Select category</option>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>Housing</option>
+              <option>Utilities</option>
+              <option>Health</option>
+              <option>Entertainment</option>
+              <option>Education</option>
+              <option>Shopping</option>
+              <option>Travel</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>
+            Description
+            <input type="text" id="description" name="description" placeholder="What was this for?" required>
+          </label>
+          <label>
+            Amount
+            <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="0.00" required>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Add Expense</button>
+          <button type="button" id="reset-form" class="ghost">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Filter & Summary</h2>
+        <div class="panel-actions">
+          <button type="button" id="export-csv" class="ghost">Export CSV</button>
+          <button type="button" id="clear-all" class="danger ghost">Clear All</button>
+        </div>
+      </div>
+      <div class="filters grid">
+        <label>
+          From
+          <input type="date" id="from-date">
+        </label>
+        <label>
+          To
+          <input type="date" id="to-date">
+        </label>
+        <label>
+          Category
+          <select id="filter-category">
+            <option value="">All</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Housing</option>
+            <option>Utilities</option>
+            <option>Health</option>
+            <option>Entertainment</option>
+            <option>Education</option>
+            <option>Shopping</option>
+            <option>Travel</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>
+          Search
+          <input type="text" id="search-text" placeholder="Description contains...">
+        </label>
+      </div>
+      <div class="summary">
+        <div class="card">
+          <p>Total (all)</p>
+          <strong id="total-all">$0.00</strong>
+        </div>
+        <div class="card">
+          <p>Total (filtered)</p>
+          <strong id="total-filtered">$0.00</strong>
+        </div>
+        <div class="card">
+          <p>Count (filtered)</p>
+          <strong id="count-filtered">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Expenses</h2>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th class="numeric">Amount</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="expense-rows">
+            <tr class="empty-state">
+              <td colspan="5">No expenses yet. Add your first expense above.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Data is stored locally in your browser.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
