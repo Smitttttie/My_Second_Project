@@ -26,6 +26,9 @@
         <strong id="hero-month-total">$0.00</strong>
         <small id="hero-month-label">Current month</small>
       </div>
+      <div class="theme-toggle">
+        <button type="button" id="theme-toggle" class="ghost">Toggle theme</button>
+      </div>
     </header>
   </div>
 
@@ -62,10 +65,21 @@
             Amount
             <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="0.00" required>
           </label>
+          <label>
+            Currency
+            <select id="amount-currency" name="amount-currency">
+              <option>USD</option>
+              <option>EUR</option>
+              <option>GBP</option>
+              <option>JPY</option>
+              <option>CAD</option>
+            </select>
+          </label>
         </div>
         <div class="form-actions">
-          <button type="submit">Add Expense</button>
+          <button type="submit" id="submit-expense">Add Expense</button>
           <button type="button" id="reset-form" class="ghost">Reset</button>
+          <button type="button" id="cancel-edit" class="ghost danger" hidden>Cancel edit</button>
         </div>
       </form>
     </section>
@@ -107,6 +121,23 @@
           Search
           <input type="text" id="search-text" placeholder="Description contains...">
         </label>
+        <label>
+          Display currency
+          <select id="display-currency">
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>JPY</option>
+            <option>CAD</option>
+          </select>
+        </label>
+      </div>
+      <div class="quick-filters">
+        <button type="button" class="ghost" data-range="this-month">This month</button>
+        <button type="button" class="ghost" data-range="last-month">Last month</button>
+        <button type="button" class="ghost" data-range="this-year">This year</button>
+        <button type="button" class="ghost" data-range="clear">Clear filters</button>
+        <button type="button" class="ghost" id="seed-sample">Seed sample data</button>
       </div>
       <div class="summary">
         <div class="card">
@@ -155,10 +186,10 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Category</th>
+              <th data-sort="date">Date</th>
+              <th data-sort="category">Category</th>
               <th>Description</th>
-              <th class="numeric">Amount</th>
+              <th class="numeric" data-sort="amount">Amount</th>
               <th></th>
             </tr>
           </thead>
