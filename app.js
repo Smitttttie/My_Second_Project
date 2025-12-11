@@ -215,8 +215,10 @@
         <td><span class="chip">${escapeHtml(item.category)}</span></td>
         <td>${escapeHtml(item.description)}</td>
         <td class="numeric">
-          ${formatCurrency(convertToDisplay(item.amount, item.currency))}
-          <br><small>${item.currency}</small>
+          <div class="amount-stack">
+            <div class="amount-main">${formatCurrency(convertToDisplay(item.amount, item.currency))} <small>${settings.displayCurrency}</small></div>
+            <div class="amount-sub">${item.amount.toFixed(2)} ${item.currency}</div>
+          </div>
         </td>
         <td class="numeric">
           <div class="row-actions">
