@@ -29,9 +29,10 @@
   --danger: #f87171;
   --accent: #22d3ee;
   --card: #0b1224;
-  --table-head: #111827;
+  --table-head: #0f172a;
   --chip-bg: rgba(139, 92, 246, 0.15);
   --chip-text: #e5deff;
+  --table-hover: rgba(255, 255, 255, 0.04);
 }
 
 * {
@@ -286,6 +287,8 @@ th, td {
   padding: 0.85rem 0.65rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
+  color: var(--text);
+  background: var(--panel);
 }
 
 th {
@@ -311,7 +314,7 @@ th.sorted::after {
 }
 
 tbody tr:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--table-hover, rgba(0, 0, 0, 0.03));
 }
 
 .empty-state td {
