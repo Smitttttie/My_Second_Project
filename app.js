@@ -8,6 +8,8 @@
     GBP: 0.8,
     JPY: 156,
     CAD: 1.36,
+    AUD: 1.5,
+    ZAR: 17.8,
   };
 
   const elements = {
